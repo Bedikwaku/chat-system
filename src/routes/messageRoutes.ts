@@ -1,7 +1,7 @@
 import express from "express";
 import { screenMessage } from "../middleware/screenMessage.js";
 import { enqueueMessage } from "../services/queueService.js";
-import { encrypt } from "../services/encryptionService.js";
+import { encrypt } from "../services/Cryptography/encryptionService.js";
 
 const router = express.Router();
 

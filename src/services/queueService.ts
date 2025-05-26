@@ -1,5 +1,5 @@
 import { ChatMessage } from "../types/Message.js";
-import { decrypt } from "./encryptionService.js";
+import { decrypt } from "./Cryptography/encryptionService.js";
 import { saveMessage } from "../models/Message.js";
 
 const mockQueue: string[] = []; // Encrypted JSON strings

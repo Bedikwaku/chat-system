@@ -1,7 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import messageRoutes from "./routes/messageRoutes.js";
-import { setDatabaseImplementation } from "./models/iDatabase.js";
+import { setDatabaseImplementation } from "./models/Database.js";
 import { dynamoDbImpl } from "./models/Database/dynamoDbClient.js";
 import { pollMessages } from "./services/queueService.js";
 
