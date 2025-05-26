@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from "express";
+import { Logger } from "../objects/Logging/logger.js";
 
 export const screenMessage = async (
   req: Request,
@@ -6,5 +7,6 @@ export const screenMessage = async (
   next: NextFunction
 ) => {
   // Stub for future content moderation
+  Logger.warn("[Warn] screenMessage: Content moderation not implemented yet");
   next();
 };

@@ -15,13 +15,14 @@ import { marshall } from "@aws-sdk/util-dynamodb";
 import { CredentialsProvider } from "../../services/Cryptography/Auth/Credentials/CredentialProviders.js";
 import { DefaultCredentialsProviderInterface } from "../../services/Cryptography/Auth/Credentials/CredentialProviders/defaultCredentialsProvider.js";
 import { AWS_CONFIG } from "../../states/Configs/AwsConfig.js";
+import { Logger } from "../../objects/Logging/logger.js";
 // Removed import of fromStatic as it's not needed; use static credentials directly in the client config.
 
 // const client = new DynamoDBClient({ region: "us-east-1" });
 const TABLE_NAME = "ChatMessages";
 const getClient = () => {
   const client = new DynamoDBClient({
-    region: "us-west-2", // Replace with your region
+    ...AWS_CONFIG, // Replace with your region
     credentials: {
       accessKeyId: "YOUR_ACCESS_KEY_ID",
       secretAccessKey: "YOUR_SECRET_ACCESS_KEY",
@@ -42,8 +43,8 @@ export const createDynamoDbClient = async (
   credentialsProvider?: DefaultCredentialsProviderInterface // Todo: Implement AWS Credentials Provider
 ): Promise<DynamoDBClient> => {
   if (client) {
-    console.warn(
-      "Attempted to create a new DynamoDB client, but one already exists."
+    Logger.warn(
+      "[WARN] createDynamoDbClient: Attempted to create a new DynamoDB client, but one already exists."
     );
     return Promise.resolve(client);
   }
@@ -53,12 +54,12 @@ export const createDynamoDbClient = async (
       "No credentials or credentials provider provided for DynamoDB client creation."
     );
   } else if (credentials && credentialsProvider) {
-    console.warn(
-      "Both credentials and credentials provider provided. Using credentials."
+    Logger.warn(
+      "[WARN] createDynamoDbClient: Both credentials and credentials provider provided. Using credentials."
     );
     return Promise.resolve(
       new DynamoDBClient({
-        region: "us-west-2", // Replace with your region
+        ...AWS_CONFIG, // Replace with your region
         credentials: {
           accessKeyId: credentials.accessKeyId,
           secretAccessKey: credentials.secretAccessKey,
@@ -67,8 +68,8 @@ export const createDynamoDbClient = async (
       })
     );
   } else if (!credentials && credentialsProvider) {
-    console.debug(
-      "Using credentials provider to obtain credentials for DynamoDB client."
+    Logger.debug(
+      "[DEBUG] createDynamoDbClient: Using credentials provider to obtain credentials."
     );
     const credentials = await credentialsProvider.getCredentials();
     return Promise.resolve(
@@ -81,7 +82,9 @@ export const createDynamoDbClient = async (
       })
     );
   } else {
-    console.debug("Using static credentials for DynamoDB client.");
+    Logger.debug(
+      "[DEBUG] createDynamoDbClient: Using static credentials for DynamoDB client."
+    );
     return Promise.resolve(
       new DynamoDBClient({
         ...AWS_CONFIG,
@@ -97,6 +100,10 @@ export const createDynamoDbClient = async (
 
 export const dynamoDbImpl: DatabaseInterface = {
   saveMessage: async (msg: ChatMessage): Promise<void> => {
+    Logger.warn(
+      "[WARN] dynamoDbImpl.saveMessage: DynamoDB not implemented yet, using mock implementation."
+    );
+    return Promise.resolve();
     const client = getClient();
     const params = {
       TableName: TABLE_NAME,
@@ -105,23 +112,4 @@ export const dynamoDbImpl: DatabaseInterface = {
     await client.send(new PutItemCommand(params));
     return Promise.resolve();
   },
-
-  // getMessagesForUser: async (userId: string): Promise<ChatMessage[]> => {
-  //   const params = {
-  //     TableName: TABLE_NAME,
-  //     KeyConditionExpression: "userId = :uid",
-  //     ExpressionAttributeValues: {
-  //       ":uid": { S: userId },
-  //     },
-  //   };
-  //   // const result = await client.send(new QueryCommand(params));
-  // return (result.Items || []).map((item) => ({
-  //   id: item.messageId.S!,
-  //   userId: item.userId.S!,
-  //   content: item.content.S!,
-  //   timestamp: parseInt(item.timestamp.N!),
-  // }));
-
-  //   return []; // Placeholder return for now
-  // },
 };

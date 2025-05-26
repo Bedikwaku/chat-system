@@ -1,5 +1,6 @@
 import { inherits } from "util";
 import { Credentials } from "./Credentials.js";
+import { Logger } from "../../../../objects/Logging/logger.js";
 
 export interface CredentialsProviderInterface {
   getCredentials(): Credentials;
@@ -21,7 +22,7 @@ export class DefaultCredentials extends Credentials {
     public password: string = "default-password"
   ) {
     super();
-    console.warn(
+    Logger.warn(
       "DefaultCredentials should NOT be used in a production environment."
     );
   }

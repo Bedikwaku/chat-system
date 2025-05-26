@@ -1,13 +1,13 @@
 import { ChatMessage } from "../types/Message.js";
 
 export interface DatabaseInterface {
-  saveMessage(msg: ChatMessage): Promise<void>;
+  saveMessage(msg: ChatMessage): Promise<any>;
   // getMessagesForUser(userId: string): Promise<ChatMessage[]>;
 }
 
 let implementation: DatabaseInterface | null = null;
 
-export const saveMessage = async (msg: ChatMessage): Promise<void> => {
+export const saveMessage = async (msg: ChatMessage): Promise<any> => {
   // Sometimes the message queue needs to be flushed
   // when we receive a message, before we send a success response
   // we enqueue the message and save it to the database

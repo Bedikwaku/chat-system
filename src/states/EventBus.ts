@@ -1,3 +1,5 @@
+import { Logger } from "../objects/Logging/logger.js";
+
 type Listener<T = void> = (payload: T) => void;
 
 class EventBus {
@@ -20,9 +22,9 @@ class EventBus {
   }
 
   public publish<T = void>(event: string, payload: T): void {
-    console.debug(`Publishing event: ${event}`);
+    Logger.debug(`Publishing event: ${event}`);
     const list = this.listeners.get(event) ?? [];
-    console.debug(`Listeners for event: ${list}`);
+    Logger.debug(`Listeners for event: ${list}`);
     if (!list) return;
     list.forEach((listener) => listener(payload));
   }

@@ -1,9 +1,10 @@
+import { Logger } from "../../../../../objects/Logging/logger.js";
 import { CredentialsProvider } from "../CredentialProviders.js";
 import { DefaultCredentials } from "../credentialsProvider.js";
 
 export class DefaultCredentialsProviderInterface extends CredentialsProvider {
   getCredentials(): Promise<DefaultCredentials> {
-    console.warn(
+    Logger.warn(
       "DefaultCredentialsProviderInterface should NOT be used in a production environment. " +
         "Please implement a custom credentials provider for your application."
     );

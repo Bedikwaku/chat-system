@@ -1,4 +1,5 @@
 export interface ChatMessage {
+  requestId?: string;
   id: string;
   content: string;
   recepient: string;

@@ -1,11 +1,12 @@
 import { ChatMessage } from "../types/Message.js";
 import { decrypt } from "./Cryptography/encryptionService.js";
 import { saveMessage } from "../models/Message.js";
+import { Logger } from "../objects/Logging/logger.js";
 
 const mockQueue: string[] = []; // Encrypted JSON strings
 const deadLetterQueue: string[] = []; // For failed messages
 
-export const enqueueMessage = (encrypted: string) => {
+export const enqueueMessage = async (encrypted: string) => {
   mockQueue.push(encrypted);
 };
 
@@ -19,20 +20,20 @@ export const pollMessages = async (): Promise<void> => {
         msg.id = crypto.randomUUID(); // Generate a new ID for the message
         msg.timestamp = Date.now(); // Set the current timestamp
         if (!msg.recepient) {
-          console.warn("Message has no recipient, skipping:", msg);
+          Logger.warn("Message has no recipient, skipping:", msg);
           deadLetterQueue.push(encrypted);
           continue;
         } else if (!msg.content) {
-          console.warn("Message has no content, skipping:", msg);
+          Logger.warn("Message has no content, skipping:", msg);
           deadLetterQueue.push(encrypted);
           continue;
         } else if (!msg.sender) {
-          console.warn("Message has no sender, skipping:", msg);
+          Logger.warn("Message has no sender, skipping:", msg);
           deadLetterQueue.push(encrypted);
           continue;
         }
 
-        console.log("Processing message:", msg);
+        Logger.log("Processing message:", msg);
         // await saveMessage(msg);
       }
     }
