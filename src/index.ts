@@ -5,10 +5,9 @@ import { setDatabaseImplementation } from "./models/Database.js";
 import { dynamoDbImpl } from "./models/Database/dynamoDbClient.js";
 import { pollMessages } from "./services/queueService.js";
 import { DefaultAuthMiddleware } from "./middleware/auth.js";
-import { getLogger } from "./objects/Logging/logger.js";
+import { Logger } from "./objects/Logging/logger.js";
 
 dotenv.config();
-const Logger = getLogger();
 
 const app = express();
 app.use(express.json());

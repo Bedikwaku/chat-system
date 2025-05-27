@@ -1,5 +1,3 @@
-import { get } from "http";
-
 export class Logger {
   static log(...args: any[]) {
     console.log(`[INFO]`, ...args);

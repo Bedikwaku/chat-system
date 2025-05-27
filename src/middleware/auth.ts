@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { send } from "process";
 import { generateKey } from "../services/Cryptography/encryptionService.js";
-import { getLogger } from "../objects/Logging/logger.js";
+import { Logger } from "../objects/Logging/logger.js";
 
 export interface AuthOptions {
   // Extend with additional options as needed
@@ -35,7 +35,6 @@ export class DefaultAuthMiddleware extends AuthMiddleware {
         requestId: "default-request-id", // Replace with actual request ID logic
       };
     };
-    const Logger = getLogger();
     Logger.debug(
       "[DEBUG] DefaultAuthMiddleware: Checking authentication status"
     );
