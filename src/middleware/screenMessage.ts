@@ -7,6 +7,6 @@ export const screenMessage = async (
   next: NextFunction
 ) => {
   // Stub for future content moderation
-  Logger.warn("[Warn] screenMessage: Content moderation not implemented yet");
+  Logger.warn("screenMessage: Content moderation not implemented yet");
   next();
 };

@@ -18,4 +18,8 @@ export class Logger {
   static debug(...args: any[]) {
     console.debug(`[DEBUG]`, ...args);
   }
+
+  static critical(...args: any[]) {
+    console.error(`[CRITICAL]`, ...args);
+  }
 }

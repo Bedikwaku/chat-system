@@ -16,6 +16,7 @@ import { CredentialsProvider } from "../../services/Cryptography/Auth/Credential
 import { DefaultCredentialsProviderInterface } from "../../services/Cryptography/Auth/Credentials/CredentialProviders/defaultCredentialsProvider.js";
 import { AWS_CONFIG } from "../../states/Configs/AwsConfig.js";
 import { Logger } from "../../objects/Logging/logger.js";
+import { Conversation, ConversationStatus } from "../Conversation.js";
 // Removed import of fromStatic as it's not needed; use static credentials directly in the client config.
 
 // const client = new DynamoDBClient({ region: "us-east-1" });
@@ -44,7 +45,7 @@ export const createDynamoDbClient = async (
 ): Promise<DynamoDBClient> => {
   if (client) {
     Logger.warn(
-      "[WARN] createDynamoDbClient: Attempted to create a new DynamoDB client, but one already exists."
+      "createDynamoDbClient: Attempted to create a new DynamoDB client, but one already exists."
     );
     return Promise.resolve(client);
   }
@@ -55,7 +56,7 @@ export const createDynamoDbClient = async (
     );
   } else if (credentials && credentialsProvider) {
     Logger.warn(
-      "[WARN] createDynamoDbClient: Both credentials and credentials provider provided. Using credentials."
+      "createDynamoDbClient: Both credentials and credentials provider provided. Using credentials."
     );
     return Promise.resolve(
       new DynamoDBClient({
@@ -69,7 +70,7 @@ export const createDynamoDbClient = async (
     );
   } else if (!credentials && credentialsProvider) {
     Logger.debug(
-      "[DEBUG] createDynamoDbClient: Using credentials provider to obtain credentials."
+      "createDynamoDbClient: Using credentials provider to obtain credentials."
     );
     const credentials = await credentialsProvider.getCredentials();
     return Promise.resolve(
@@ -83,7 +84,7 @@ export const createDynamoDbClient = async (
     );
   } else {
     Logger.debug(
-      "[DEBUG] createDynamoDbClient: Using static credentials for DynamoDB client."
+      "createDynamoDbClient: Using static credentials for DynamoDB client."
     );
     return Promise.resolve(
       new DynamoDBClient({
@@ -101,9 +102,10 @@ export const createDynamoDbClient = async (
 export const dynamoDbImpl: DatabaseInterface = {
   saveMessage: async (msg: ChatMessage): Promise<void> => {
     Logger.warn(
-      "[WARN] dynamoDbImpl.saveMessage: DynamoDB not implemented yet, using mock implementation."
+      "dynamoDbImpl.saveMessage: DynamoDB not implemented yet, using mock implementation."
     );
     return Promise.resolve();
+
     const client = getClient();
     const params = {
       TableName: TABLE_NAME,
@@ -111,5 +113,29 @@ export const dynamoDbImpl: DatabaseInterface = {
     };
     await client.send(new PutItemCommand(params));
     return Promise.resolve();
+  },
+  getConversation: async (conversationId: string): Promise<Conversation> => {
+    Logger.warn(
+      "dynamoDbImpl.getConversation: DynamoDB not implemented yet, using mock implementation."
+    );
+    return {
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+      id: conversationId,
+      userIds: [],
+      messages: [],
+      status: ConversationStatus.ACTIVE,
+    };
+
+    // const client = getClient();
+    // const params = {
+    //   TableName: TABLE_NAME,
+    //   KeyConditionExpression: "conversationId = :conversationId",
+    //   ExpressionAttributeValues: {
+    //     ":conversationId": { S: conversationId },
+    //   },
+    // };
+    // const result = await client.send(new QueryCommand(params));
+    // return result.Items ? result.Items.map((item) => unmarshall(item)) : [];
   },
 };

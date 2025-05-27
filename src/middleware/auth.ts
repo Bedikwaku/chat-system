@@ -35,9 +35,7 @@ export class DefaultAuthMiddleware extends AuthMiddleware {
         requestId: "default-request-id", // Replace with actual request ID logic
       };
     };
-    Logger.debug(
-      "[DEBUG] DefaultAuthMiddleware: Checking authentication status"
-    );
+    Logger.debug("DefaultAuthMiddleware: Checking authentication status");
     if (!isAuthenticated) {
       return res.status(401).json({ message: "Unauthorized" });
     }
